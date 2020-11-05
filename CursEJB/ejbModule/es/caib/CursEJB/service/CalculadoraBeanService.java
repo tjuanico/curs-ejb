@@ -21,15 +21,18 @@ import es.caib.CursEJB.interfaces.*;
 		return a-b;
 	}
 
+	PersonaService p = new PersonaService();
 	
 	@Override
 	public int resta_especial(int a, int b) {
 		// TODO Auto-generated method stub
 	
-		PersonaService p = new PersonaService();
+		
 		Persona pers = new Persona();
 		pers.setDni("2222");
 		p.addPersona(pers);
+		
+		
 		
 		return 0;
 		
