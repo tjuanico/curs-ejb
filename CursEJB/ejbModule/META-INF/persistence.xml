@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+                                 http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0"> 	
+        	<persistence-unit name="cursweb-ds" transaction-type="JTA">
+        	<jta-data-source>java:jboss/datasources/cursweb-ds</jta-data-source>
+        	<properties>
+            	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            	 <property name="hibernate.show_sql" value="true" /> 
+        	</properties>
+    	</persistence-unit>
+    	<!--  OHOOOOOOOOOOJO 
+    	mysql> SET GLOBAL time_zone = '-2:00';
+                Query OK, 0 rows affected (0.02 sec)
+                mysql> select now() from dual; 
+                -->
+</persistence>
