@@ -5,10 +5,13 @@ import java.io.PrintWriter;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import es.caib.CursEJB.entity.Persona;
 import es.caib.CursEJB.entity.Proveidor;
@@ -26,25 +29,27 @@ public class ProvaServlet extends HttpServlet {
 	@EJB
 	private GeneradorInterface myGenerador;
 	
-	// EJB 3.0
+
 	@EJB 
-	private ReproductorInterfaceLocal myReproductor;
+	private ReproductorInterfaceLocal myReproductor; 	// EJB 3.0
 	
-	@EJB 
+	@EJB
 	private PersonaInterfaceLocal myPersona;
 	
 	@EJB
 	private ProveidorInterfaceLocal myProveidorService;
+	
+	Logger logger = Logger.getLogger(ProvaServlet.class);
 		
 	@PostConstruct
 	public void init() {
-		System.out.print("Entrada a init: " + myCalculator);
+		logger.info("Entrada a init: " + myCalculator);
 	}
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
-		System.out.print("Entrada a doGet: " + myCalculator);
+		logger.info("Entrada a doGet: " + myCalculator);
 		int resultat = myCalculator.suma(3, 5); // Cridem EJB
 		int resultat2 = myGenerador.seguent();
 		String resultat3 = new String("");	
@@ -55,7 +60,7 @@ public class ProvaServlet extends HttpServlet {
 		
 		Proveidor prov = myProveidorService.getProveidorById(1);
 		
-		resultat3 = myPersona.getNom("2222222J");
+		resultat3 = myPersona.getNom("222222");
 		
 		myReproductor.atura();
 		myReproductor.jump_song();

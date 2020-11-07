@@ -31,9 +31,7 @@ import es.caib.CursEJB.interfaces.*;
 		Persona pers = new Persona();
 		pers.setDni("2222");
 		p.addPersona(pers);
-		
-		
-		
+					
 		return 0;
 		
 	}

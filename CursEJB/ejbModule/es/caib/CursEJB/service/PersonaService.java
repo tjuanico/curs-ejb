@@ -2,7 +2,6 @@ package es.caib.CursEJB.service;
 
 
 import javax.annotation.Resource;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.jms.Connection;
 import javax.jms.JMSException;
@@ -15,11 +14,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
 import es.caib.CursEJB.entity.Persona;
 import es.caib.CursEJB.interfaces.PersonaInterfaceLocal;
 
 @Stateless
-@RolesAllowed("ROL_1")
 public class PersonaService implements PersonaInterfaceLocal {
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
@@ -30,28 +30,39 @@ public class PersonaService implements PersonaInterfaceLocal {
 	@PersistenceContext(unitName="cursweb-ds")
 	EntityManager em;
 	
+	Logger logger = Logger.getLogger(PersonaService.class);
+	
 	@Override
 	public String getNom(String dni) {
 		
-		Query query = em.createQuery("SELECT p FROM Persona p WHERE p.dni = '"+ dni +"'"); // INNER JOIN LEFT JOIN RIGHT JOIN 
+		// Amb SQL Normal
+		Query query = em.createQuery("SELECT p FROM Persona p WHERE p.dni = '"+ dni +"'");  
 		Persona p = (Persona)query.getSingleResult();
-		
+		p.setNom("112233S");
+		//em.persist(p);
+		logger.info("getNom persona --> Dormim");
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // Acció simulada que dura un minut. Recalcular nòmina/pensió/ajut
 		return p.getNom();
 		
-		
 	}
-
 	
 	@Override
 	public void addPersona(Persona p) {
 		try
 		{
-			// String mySQL = new String("insert into PERSONA (id, nom) values (" + p.dni + ")"
-			em.persist(p); // JPA insert into PERSONA (id, nom) values (1,'perico');
-			System.out.println("Inserim persona");
 			
+			logger.info("Inserim persona > Inici");
+			
+			em.persist(p); // JPA insert into PERSONA (id, nom) values (1,'perico');
+			logger.info("Persona inserida");
+					
 			// Acció que dura un minut COLL D'AMPOLLA DETECTAT!!!!!
-			//Thread.sleep(60000); // Acció simulada que dura un minut. Recalcular nòmina/pensió/ajut
+			//Thread.sleep(15000); // Acció simulada que dura un minut. Recalcular nòmina/pensió/ajut
 			
 			// Canviem l'acció per un missatge a la cua.
 			try {
@@ -63,15 +74,15 @@ public class PersonaService implements PersonaInterfaceLocal {
 			    TextMessage textMessage = session.createTextMessage();
 			    textMessage.setText(message);
 			    messageProducer.send(textMessage);
-			    System.out.println("Missatge enviat correctament");
+			    logger.info("Missatge enviat a la coa correctament");
 		   } 
 		   catch (JMSException ex) {
-			      System.out.println("Error enviant missatge: " + ex.toString());
+			   logger.info("Error enviant missatge: " + ex.toString());
 		   }
 			
 		}
 		catch(Exception ex) {
-			System.out.println("Error inserint persona" + ex.toString());
+			logger.info("Error inserint persona" + ex.toString());
 		}	
 	}
 

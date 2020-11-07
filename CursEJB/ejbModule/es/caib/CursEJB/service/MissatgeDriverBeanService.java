@@ -5,6 +5,8 @@ import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
+import org.apache.log4j.Logger;
+
 /* ------------------------------------------
  * RECORDA MODIFICAR STANDALONE.XML -> STANDALONE-FULL.XML
  * RECORDA JDK 1.8 i facelet 12 > 10 > 1.8
@@ -17,17 +19,21 @@ import javax.jms.MessageListener;
 	    @ActivationConfigProperty(propertyName="destination", propertyValue="java:/jms/queue/COLA")
 	    })
 public class MissatgeDriverBeanService implements MessageListener {
+	
+	Logger logger = Logger.getLogger(MissatgeDriverBeanService.class);
+	
 	public void onMessage(Message message) {
 		// Processament del missatge rebut
-		System.out.print("Roger that --> Missatge rebut, començam a treballar");
+		logger.info("Roger that --> Missatge rebut, començam a treballar");
 		try {
+			logger.info("dormim 60seg.");
 			Thread.sleep(60000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} // D
 		finally {
-			System.out.print("Roger that --> Bona feina finalitzada");	
+			logger.info("Roger that --> Bona feina finalitzada");
 		}
 	}
 }

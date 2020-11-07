@@ -6,15 +6,23 @@ import java.util.Iterator;
 
 import javax.ejb.Timer;
 import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.Timeout;
 import javax.ejb.TimerService;
 
+import org.apache.log4j.Logger;
+
 import es.caib.CursEJB.entity.Persona;
+import es.caib.CursEJB.interfaces.PersonaInterfaceLocal;
 import es.caib.CursEJB.interfaces.SchedulerInterfaceLocal;
 
 @Stateless
+@RolesAllowed("ROL_1")
 public class SchedulerBeanService implements SchedulerInterfaceLocal{
+	
+	Logger logger = Logger.getLogger(SchedulerBeanService.class);
 	
 	/** Injectam el servei de temps */
 	@Resource TimerService timerService;
@@ -41,7 +49,7 @@ public class SchedulerBeanService implements SchedulerInterfaceLocal{
 		
 		long intervalDuration = new Integer(INTERVAL_IN_MINUTES).longValue()*60*1000;
 		
-		System.out.println("Començam temporitzador: ");
+		logger.info("Començam temporitzador: ");
 		timerService.createTimer(initialExpiration.getTime(),intervalDuration,null);
 		
 	}
@@ -49,29 +57,31 @@ public class SchedulerBeanService implements SchedulerInterfaceLocal{
 	@Override
 	public void shutDownTimer() {
 		Collection<Timer> timers = timerService.getTimers();
-		System.out.println("Tancam temporitzador");
+		logger.info("Tancam temporitzador");
 		if (timers != null)
 		{
 			for (Iterator<Timer> iterator = timers.iterator(); iterator.hasNext();) {
 				Timer t = (Timer) iterator.next();
 				t.cancel();
-				System.out.println("shutdowntimer canceled.");
+				logger.info("shutdowntimer canceled.");
 			}
 		}
 	}
+	
+	@EJB
+	PersonaInterfaceLocal myPersona;
 	
 	@Timeout
 	public void execute(Timer timer)
 	{
 		Prova p2 = new Prova();
 		p2.func1();
-		System.out.println("Cridam");
-		PersonaService mypersona = new PersonaService();
+		logger.info("Cridam");
 		Persona p = new Persona();
 		p.setDni("222213J");
 		p.setNom("Perico");
-		mypersona.addPersona(p);
-		System.out.println("Fet");
+		myPersona.addPersona(p);
+		logger.info("Fet");
 	}
 	
 	
