@@ -2,10 +2,10 @@ package es.caib.CursWeb;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import es.caib.CursEJB.entity.Factura;
 import es.caib.CursEJB.entity.Persona;
 import es.caib.CursEJB.entity.Proveidor;
 import es.caib.CursEJB.interfaces.*;
@@ -52,6 +53,7 @@ public class ProvaServlet extends HttpServlet {
 		logger.info("Entrada a doGet: " + myCalculator);
 		int resultat = myCalculator.suma(3, 5); // Cridem EJB
 		int resultat2 = myGenerador.seguent();
+		
 		String resultat3 = new String("");	
 		Persona p = new Persona();
 		p.setDni("222213J");
@@ -65,6 +67,9 @@ public class ProvaServlet extends HttpServlet {
 		myReproductor.atura();
 		myReproductor.jump_song();
 		myReproductor.reprodueix();
+		
+		List<Persona> llistaPersones = myPersona.getTothom();
+		String my_dni = myPersona.getDni("Maria");
 		
 	    response.setContentType("text/html;charset=UTF-8");
 	    PrintWriter out = response.getWriter();
@@ -87,6 +92,14 @@ public class ProvaServlet extends HttpServlet {
 	        out.println("<p>Resultat crida EJB statefull: " + resultat2 + "</p>");
 	        out.println("<p>Nom de la persona amb dni 2222222J: " + resultat3 + "</p>");
 	        out.println("<p>Número de factures del proveidor: " + prov.getFactures().size() + "</p>");
+	        out.println("<p>DNI de na Maria: " + my_dni + "</p>");
+	        out.println("<table cellspacing='1' cellpadding='2' border='0'>");
+	        out.println("<tr><td><b>DNI</b></td><td><b>Nom</b></td></tr>");
+	        for (Persona p4 : llistaPersones) {
+	            out.println("<tr><td>" + p4.getDni() + "</td><td>" + p4.getNom()+ "</td></tr>");
+	        }
+	        
+	        out.println("</table>");
 	        out.println("</body>");
 	        out.println("</html>");
 	    } finally {

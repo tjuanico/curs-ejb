@@ -3,10 +3,15 @@ package es.caib.CursEJB.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="persona")
+@NamedQueries({ @NamedQuery(name = "Persona.getAll", query = "select p from Persona p"),
+	            @NamedQuery(name = "Persona.getByName",query="SELECT p FROM Persona p WHERE p.nom = :nom")
+	})
 public class Persona {
 	
 	@Id

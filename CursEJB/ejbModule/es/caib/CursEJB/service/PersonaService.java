@@ -1,8 +1,14 @@
 package es.caib.CursEJB.service;
 
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.InvocationContext;
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
@@ -30,7 +36,20 @@ public class PersonaService implements PersonaInterfaceLocal {
 	@PersistenceContext(unitName="cursweb-ds")
 	EntityManager em;
 	
-	Logger logger = Logger.getLogger(PersonaService.class);
+	//Logger logger = Logger.getLogger(PersonaService.class);
+	Logger logger;
+	
+	@PostConstruct
+	void init() {
+		logger = Logger.getLogger(PersonaService.class);
+		logger.info("Dins @PostConstruct");
+	}
+	
+	@PreDestroy()
+	void destroy() {
+		logger.info("Dins @PreDestroy");
+	}
+	
 	
 	@Override
 	public String getNom(String dni) {
@@ -42,11 +61,11 @@ public class PersonaService implements PersonaInterfaceLocal {
 		//em.persist(p);
 		logger.info("getNom persona --> Dormim");
 		try {
+			// Acció simulada que dura un minut. Recalcular nòmina/pensió/ajut
 			Thread.sleep(15000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} // Acció simulada que dura un minut. Recalcular nòmina/pensió/ajut
+		} 
 		return p.getNom();
 		
 	}
@@ -60,7 +79,11 @@ public class PersonaService implements PersonaInterfaceLocal {
 			
 			em.persist(p); // JPA insert into PERSONA (id, nom) values (1,'perico');
 			logger.info("Persona inserida");
-					
+			
+			logger.info("Cridam una classe normal de Java la que instanciarà un entityManager");
+			Prova pr = new Prova();
+			pr.func1(p);
+			logger.info("Persona inserida");
 			// Acció que dura un minut COLL D'AMPOLLA DETECTAT!!!!!
 			//Thread.sleep(15000); // Acció simulada que dura un minut. Recalcular nòmina/pensió/ajut
 			
@@ -89,10 +112,49 @@ public class PersonaService implements PersonaInterfaceLocal {
 
 	@Override
 	public void revisaSignatura() {
-		// TODO Auto-generated method stub
 		Prova p = new Prova();
-		p.func1();
+		Persona pers = new Persona();
+		pers.setDni("7654R");
+		pers.setNom("xi xang");
+		//p.func1(pers);
+	}
+
+	@Override
+	public String getDni(String nom) {
+		Query query = em.createNamedQuery("Persona.getByName");
+		query.setParameter("nom",nom);
+		List<Persona> llistaPersones = query.getResultList();
+		String resultado = new String("");
+		
+		for (Persona p : llistaPersones) {
+			logger.info("Trobada: " + p.getNom());
+            resultado = p.getDni();
+        }
+		return resultado;
+	}
+
+	@Override
+	public List<Persona> getTothom() {
+		Query query = em.createNamedQuery("Persona.getAll");
+		List<Persona> results = query.getResultList();
+		return results;
 	}
 	
 	
+	@AroundInvoke
+	public Object TimerLog(InvocationContext ctx) throws Exception {
+		String beanClassName = ctx.getClass().getName(); 
+		String businessMethodName = ctx.getMethod().getName();
+		String target = beanClassName + "." + businessMethodName ; 
+		long startTime = System.currentTimeMillis(); 
+		logger.info("Invoking ------------> " + target); 
+		try { 
+			return ctx.proceed(); 
+		} 
+		finally { logger.info("Exiting" + target); 
+		long totalTime = System.currentTimeMillis() - startTime; 
+		logger.info("Mètode: " + businessMethodName + "in" + beanClassName + "takes" + totalTime + "ms to execute");
+		} 
+	}
+
 }

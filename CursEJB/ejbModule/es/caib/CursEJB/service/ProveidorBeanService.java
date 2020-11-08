@@ -29,7 +29,7 @@ public class ProveidorBeanService implements ProveidorInterfaceLocal{
 		p = em.find(Proveidor.class,id);
 		
 		for (Factura f : p.getFactures()) {
-            System.out.println(f.getImport());
+            logger.info(f.getImport());
         }
 			
 		logger.info("Obtinguts proveidors");

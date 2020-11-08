@@ -74,14 +74,21 @@ public class SchedulerBeanService implements SchedulerInterfaceLocal{
 	@Timeout
 	public void execute(Timer timer)
 	{
-		Prova p2 = new Prova();
-		p2.func1();
-		logger.info("Cridam");
+		
 		Persona p = new Persona();
 		p.setDni("222213J");
 		p.setNom("Perico");
+		
+		logger.info("Cridam una classe normal de Java la que instanciarà un entityManager");
+		Prova pr = new Prova();
+		pr.func1(p);
+		logger.info("Fet");
+		
+		logger.info("Insertam persona a partir d'EJB injectat");
+		
 		myPersona.addPersona(p);
 		logger.info("Fet");
+		
 	}
 	
 	

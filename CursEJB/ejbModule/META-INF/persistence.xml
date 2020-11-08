@@ -5,11 +5,14 @@
                                  http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0"> 	
         	<persistence-unit name="cursweb-ds" transaction-type="JTA">
-        	<jta-data-source>java:jboss/datasources/cursweb-ds</jta-data-source>
-        	<properties>
-            	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
-            	 <property name="hibernate.show_sql" value="true" /> 
-        	</properties>
+        		<jta-data-source>java:jboss/datasources/cursweb-ds</jta-data-source>
+        		<class>es.caib.CursEJB.entity.Persona</class>
+        		<properties>
+            		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            		<property name="hibernate.show_sql" value="true" />
+            		<property name="hibernate.format_sql" value="true" />
+            		<property name="hibernate.generate_statistics" value="true"/> 
+        		</properties>
     	</persistence-unit>
     	<!--  OHOOOOOOOOOOJO 
     	mysql> SET GLOBAL time_zone = '-2:00';
