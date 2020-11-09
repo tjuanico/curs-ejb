@@ -60,7 +60,7 @@ public class PersonaService implements PersonaInterfaceLocal {
 	public String getNom(String dni) {
 		
 		// Amb SQL Normal
-		Query query = em.createQuery("SELECT p FROM Persona p WHERE p.dni = '"+ dni +"'");  
+		Query query = em.createQuery("SELECT p FROM persona p WHERE p.dni = '"+ dni +"'");  
 		Persona p = (Persona)query.getSingleResult();
 		p.setNom("112233S");
 		//em.persist(p);
