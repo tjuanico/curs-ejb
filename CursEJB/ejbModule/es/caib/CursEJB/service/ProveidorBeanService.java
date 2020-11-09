@@ -33,7 +33,7 @@ public class ProveidorBeanService implements ProveidorInterfaceLocal{
         }
 			
 		logger.info("Obtinguts proveidors");
-		String result = myPersona.getNom("222222");
+		String result = myPersona.getNom("222222");  /// em [1]
 		logger.info("Obtingudes persones " + result);
 		
 		return p;

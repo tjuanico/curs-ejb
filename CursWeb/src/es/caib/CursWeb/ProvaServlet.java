@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import es.caib.CursEJB.entity.Factura;
+
 import es.caib.CursEJB.entity.Persona;
 import es.caib.CursEJB.entity.Proveidor;
 import es.caib.CursEJB.interfaces.*;

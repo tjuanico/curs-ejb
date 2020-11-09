@@ -39,8 +39,13 @@ public class PersonaService implements PersonaInterfaceLocal {
 	//Logger logger = Logger.getLogger(PersonaService.class);
 	Logger logger;
 	
+	public PersonaService() {
+		
+	}
+	
 	@PostConstruct
 	void init() {
+		
 		logger = Logger.getLogger(PersonaService.class);
 		logger.info("Dins @PostConstruct");
 	}
@@ -137,6 +142,7 @@ public class PersonaService implements PersonaInterfaceLocal {
 	public List<Persona> getTothom() {
 		Query query = em.createNamedQuery("Persona.getAll");
 		List<Persona> results = query.getResultList();
+		this.getDni("344444D");
 		return results;
 	}
 	

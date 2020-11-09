@@ -35,8 +35,10 @@ public class Prova {
 	
 	public void func1(Persona p)
 	{
+		// NO S'HA DE FER MAIIIII - NO HEM DE FER..falta close()
 		logger.info("Insertam persona a partir d'instanciació");
 		em.persist(p);
+		em.close();
 		logger.info("Prova > func1() --> ok");
 	}
 }
